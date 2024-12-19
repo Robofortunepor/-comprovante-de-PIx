@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Gerador de Comprovante PIX</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 20px;
+      background-color: #f4f4f4;
+      text-align: center;
+    }
+    h1 {
+      color: #333;
+    }
+    form {
+      margin: 20px auto;
+      max-width: 400px;
+      background: #fff;
+      padding: 20px;
+      border-radius: 8px;
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+    }
+    input, select, button {
+      width: 100%;
+      padding: 10px;
+      margin: 10px 0;
+      font-size: 16px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+    }
+    button {
+      background-color: #28a745;
+      color: white;
+      border: none;
+      cursor: pointer;
+    }
+    button:hover {
+      background-color: #218838;
+    }
+  </style>
+</head>
+<body>
+  <h1>Gerador de Comprovante PIX</h1>
+  <form id="form">
+    <input type="text" id="nome" placeholder="Nome do destinatário" required>
+    <input type="text" id="cpf" placeholder="CPF do destinatário" required>
+    <input type="text" id="instituicao" placeholder="Instituição Bancária" required>
+    <input type="text" id="agencia" placeholder="Número da Agência" required>
+    <select id="tipoAgencia">
+      <option value="Normal">Agência Normal</option>
+      <option value="Digital">Agência Digital</option>
+    </select>
+    <input type="text" id="conta" placeholder="Número da Conta" required>
+    <select id="tipoConta">
+      <option value="Corrente">Conta Corrente</option>
+      <option value="Poupança">Conta Poupança</option>
+    </select>
+    <input type="text" id="valor" placeholder="Valor (R$)" required>
+    <input type="text" id="chavePix" placeholder="Chave PIX" required>
+    <input type="file" id="logo" accept="image/*">
+    <button type="button" onclick="gerarComprovante()">Gerar Comprovante</button>
+  </form>
+
+  <script>
+    function gerarComprovante() {
+      const nome = document.getElementById('nome').value;
+      const cpf = document.getElementById('cpf').value;
+      const instituicao = document.getElementById('instituicao').value;
+      const agencia = document.getElementById('agencia').value;
+      const tipoAgencia = document.getElementById('tipoAgencia').value;
+      const conta = document.getElementById('conta').value;
+      const tipoConta = document.getElementById('tipoConta').value;
+      const valor = document.getElementById('valor').value;
+      const chavePix = document.getElementById('chavePix').value;
+      const logoInput = document.getElementById('logo');
+
+      if (!nome || !cpf || !instituicao || !agencia || !conta || !valor || !chavePix) {
+        alert('Preencha todos os campos obrigatórios!');
+        return;
+      }
+
+      // Máscara para o CPF
+      const cpfMascarado = cpf.length === 11 
+        ? cpf.slice(0, 3) + '.***.***-' + cpf.slice(-2) 
+        : 'CPF inválido';
+
+      const dataAtual = new Date().toLocaleString();
+      const idTransacao = Math.random().toString(36).substr(2, 12).toUpperCase();
+
+      // Carregar logo como base64
+      if (logoInput.files && logoInput.files[0]) {
+        const reader = new FileReader();
+        reader.onload = function(e) {
+          const logoBase64 = e.target.result;
+
+          // Redirecionar para a página do comprovante
+          window.open(`comprovante.html?nome=${encodeURIComponent(nome)}&cpf=${encodeURIComponent(cpfMascarado)}&instituicao=${encodeURIComponent(instituicao)}&agencia=${encodeURIComponent(agencia)}&tipoAgencia=${encodeURIComponent(tipoAgencia)}&conta=${encodeURIComponent(conta)}&tipoConta=${encodeURIComponent(tipoConta)}&valor=${encodeURIComponent(valor)}&chavePix=${encodeURIComponent(chavePix)}&data=${encodeURIComponent(dataAtual)}&id=${encodeURIComponent(idTransacao)}&logo=${encodeURIComponent(logoBase64)}`);
+        };
+        reader.readAsDataURL(logoInput.files[0]);
+      } else {
+        // Sem logo
+        window.open(`comprovante.html?nome=${encodeURIComponent(nome)}&cpf=${encodeURIComponent(cpfMascarado)}&instituicao=${encodeURIComponent(instituicao)}&agencia=${encodeURIComponent(agencia)}&tipoAgencia=${encodeURIComponent(tipoAgencia)}&conta=${encodeURIComponent(conta)}&tipoConta=${encodeURIComponent(tipoConta)}&valor=${encodeURIComponent(valor)}&chavePix=${encodeURIComponent(chavePix)}&data=${encodeURIComponent(dataAtual)}&id=${encodeURIComponent(idTransacao)}`);
+      }
+    }
+  </script>
+</body>
+</html>

@@ -1,0 +1,28 @@
+<div class="buttons">
+  <button onclick="baixarComprovante()">Baixar Comprovante</button>
+</div>
+
+<script>
+  function baixarComprovante() {
+    html2canvas(document.getElementById('comprovante')).then(canvas => {
+      const link = document.createElement('a');
+      link.download = 'comprovante_pix.png';
+      link.href = canvas.toDataURL('image/png');
+      link.click();
+    });
+  }
+</script>
+<div class="buttons">
+  <button onclick="baixarComprovante()">Baixar Comprovante</button>
+</div>
+
+<script>
+  function baixarComprovante() {
+    html2canvas(document.getElementById('comprovante')).then(canvas => {
+      const link = document.createElement('a');
+      link.download = 'comprovante_pix.png';
+      link.href = canvas.toDataURL('image/png');
+      link.click();
+    });
+  }
+</script>

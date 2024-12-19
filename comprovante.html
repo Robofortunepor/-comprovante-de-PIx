@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Comprovante PIX</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 20px;
+      background-color: #f4f4f4;
+      text-align: center;
+    }
+    #comprovante {
+      max-width: 600px;
+      margin: 20px auto;
+      padding: 20px;
+      background: #fff;
+      border-radius: 8px;
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+      text-align: left;
+      font-size: 14px;
+    }
+    #comprovante img {
+      width: 150px;
+      margin-bottom: 20px;
+      display: block;
+    }
+    .label {
+      font-weight: bold;
+      color: #555;
+    }
+    .center {
+      text-align: center;
+    }
+    .buttons {
+      margin-top: 20px;
+      text-align: center;
+    }
+    button {
+      padding: 10px 20px;
+      font-size: 16px;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      background-color: #007bff;
+      color: white;
+    }
+    button:hover {
+      background-color: #0056b3;
+    }
+  </style>
+</head>
+<body>
+  <div id="comprovante">
+    <img id="outputLogo" src="" alt="Logo do Banco" class="center">
+    <h2 class="center">Comprovante de Transferência PIX</h2>
+    <p><span class="label">Nome:</span> <span id="outputNome"></span></p>
+    <p><span class="label">CPF:</span> <span id="outputCPF"></span></p>
+    <p><span class="label">Instituição Bancária:</span> <span id="outputInstituicao"></span></p>
+    <p><span class="label">Agência:</span> <span id="outputAgencia"></span> (<span id="outputTipoAgencia"></span>)</p>
+    <p><span class="label">Conta:</span> <span id="outputConta"></span> (<span id="outputTipoConta"></span>)</p>
+    <p><span class="label">Valor:</span> R$ <span id="outputValor"></span></p>
+    <p><span class="label">Chave PIX:</span> <span id="outputChavePix"></span></p>
+    <p><span class="label">Data:</span> <span id="outputData"></span></p>
+    <p><span class="label">ID da Transação:</span> <span id="outputID"></span></p>
+  </div>
+
+  <div class="buttons">
+    <button onclick="baixarComprovante()">Baixar Comprovante</button>
+  </div>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+  <script>
+    function carregarDados() {
+      const urlParams = new URLSearchParams(window.location.search);
+
+      document.getElementById('outputNome').innerText = urlParams.get('nome');
+      document.getElementById('outputCPF').innerText = urlParams.get('cpf');
+      document.getElementById('outputInstituicao').innerText = urlParams.get('instituicao');
+      document.getElementById('outputAgencia').innerText = urlParams.get('agencia');
+      document.getElementById('outputTipoAgencia').innerText = urlParams.get('tipoAgencia');
+      document.getElementById('outputConta').innerText = urlParams.get('conta');
+      document.getElementById('outputTipoConta').innerText = urlParams.get('tipoConta');
+      document.getElementById('outputValor').innerText = urlParams.get('valor');
+      document.getElementById('outputChavePix').innerText = urlParams.get('chavePix');
+      document.getElementById('outputData').innerText = urlParams.get('data');
+      document.getElementById('outputID').innerText = urlParams.get('id');
+
+      const logo = urlParams.get('logo');
+      if (logo) {
+        document.getElementById('outputLogo').src = logo;
+      }
+    }
+
+    function baixarComprovante() {
+      html2canvas(document.getElementById('comprovante')).then(canvas => {
+        const link = document.createElement('a');
+        link.download = 'comprovante_pix.png';
+        link.href = canvas.toDataURL('image/png');
+        link.click();
+      });
+    }
+
+    carregarDados();
+  </script>
+</body>
+</html>
